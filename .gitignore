@@ -2,3 +2,4 @@
 *try*
 **/**.js
 /dist
+.env
