@@ -13,18 +13,26 @@ export class NewsService {
   constructor(private readonly httpService: HttpService, private readonly configService: ConfigService) {}
 
   nytSearch(searchTerm: string): Observable<AxiosResponse<object[]>> {
-    const NYT_KEY = this.configService.get<string>('NYT_KEY');
+    try {
+      const NYT_KEY = this.configService.get<string>('NYT_KEY');
 
-    return this.httpService
-      .get(`${NYT_URL}q=${searchTerm}&api-key=${NYT_KEY}${NYT_FILTERS}`)
-      .pipe(map(res => res.data.response.docs));
+      return this.httpService
+        .get(`${NYT_URL}q=${searchTerm}&api-key=${NYT_KEY}${NYT_FILTERS}`)
+        .pipe(map(res => res.data.response.docs));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   guardianSearch(searchTerm: string): Observable<AxiosResponse<object[]>> {
-    const GUARDIAN_KEY = this.configService.get<string>('GUARDIAN_KEY');
+    try {
+      const GUARDIAN_KEY = this.configService.get<string>('GUARDIAN_KEY');
 
-    return this.httpService
-      .get(`${GUARDIAN_URL}?api-key=${GUARDIAN_KEY}&q=${searchTerm}`)
-      .pipe(map(res => res.data.response.results));
+      return this.httpService
+        .get(`${GUARDIAN_URL}?api-key=${GUARDIAN_KEY}&q=${searchTerm}`)
+        .pipe(map(res => res.data.response.results));
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

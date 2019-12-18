@@ -8,7 +8,11 @@ export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
   @Get()
-  findAll(@Query('q') q: string, @Query('provider') provider: string): Observable<AxiosResponse<object[]>> {
-    return this.newsService.guardianSearch(q);
+  findAll(@Query('q') q: string): Observable<AxiosResponse<object[]>> {
+    try {
+      return this.newsService.guardianSearch(q);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
