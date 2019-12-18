@@ -9,7 +9,6 @@ export class NewsController {
 
   @Get()
   findAll(@Query('q') q: string, @Query('provider') provider: string): Observable<AxiosResponse<object[]>> {
-    console.log(provider);
     return this.newsService.guardianSearch(q);
   }
 }
