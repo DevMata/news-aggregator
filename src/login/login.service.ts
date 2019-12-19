@@ -20,8 +20,7 @@ export class LoginService {
 
   public findUser(user: LoginDto): boolean {
     const searchedUser = this.Users.filter(u => u.username === user.username && u.password === user.password);
-
-    return searchedUser ? true : false;
+    return searchedUser.length ? true : false;
   }
 
   public generateToken(user: LoginDto): string {
