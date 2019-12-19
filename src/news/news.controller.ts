@@ -8,7 +8,7 @@ export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
   @Get()
-  findAll(@Query('q') q: string): Observable<New[]> {
-    return this.newsService.bothSearch(q);
+  findAll(@Query('q') q: string, @Query('source') source: string): Observable<New[]> {
+    return this.newsService.switchSourceSearch(q, source);
   }
 }
