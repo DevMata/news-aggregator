@@ -1,10 +1,9 @@
 import { Injectable, HttpService } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { AxiosResponse } from 'axios';
+import { Observable, merge } from 'rxjs';
+import { map, reduce } from 'rxjs/operators';
 
-import { SerializeNewYorkNew, SerializeGuardianNew } from './helpers/newyorktimes/serialize.helper';
+import { SerializeNewYorkNew, SerializeGuardianNew } from './helpers/serialize.helper';
 import { New } from './interfaces/New.interface';
 
 const NYT_URL = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?';
@@ -16,7 +15,7 @@ const GUARDIAN_FILTERS = '&show-tags=contributor';
 export class NewsService {
   constructor(private readonly httpService: HttpService, private readonly configService: ConfigService) {}
 
-  newYorkTimeSearch(searchTerm: string): Observable<AxiosResponse<New[]>> {
+  newYorkTimeSearch(searchTerm: string): Observable<New[]> {
     try {
       const NYT_KEY = this.configService.get<string>('NYT_KEY');
 
@@ -28,7 +27,7 @@ export class NewsService {
     }
   }
 
-  guardianSearch(searchTerm: string): Observable<AxiosResponse<New[]>> {
+  guardianSearch(searchTerm: string): Observable<New[]> {
     try {
       const GUARDIAN_KEY = this.configService.get<string>('GUARDIAN_KEY');
 
@@ -38,5 +37,12 @@ export class NewsService {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  bothSearch(searchTerm: string): Observable<New[]> {
+    const nytSearch = this.newYorkTimeSearch(searchTerm);
+    const guardianSearch = this.guardianSearch(searchTerm);
+
+    return merge(nytSearch, guardianSearch).pipe(reduce((acc, value) => [...acc, ...value]));
   }
 }
