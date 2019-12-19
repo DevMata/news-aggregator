@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { NewYorkTimeNew } from '../../interfaces/NewYorkTime.interface';
-import { GuardianNew } from '../../interfaces/TheGuardian.interface';
-import { New } from '../../interfaces/New.interface';
+import { NewYorkTimeNew } from '../interfaces/NewYorkTime.interface';
+import { GuardianNew } from '../interfaces/TheGuardian.interface';
+import { New } from '../interfaces/New.interface';
 import { getNewYorkAuthor } from './regex.helper';
+import { getGuardianContributors } from './formater.helper';
 
 export function SerializeNewYorkNew(newYorkNew: NewYorkTimeNew): New {
   const {
@@ -22,13 +23,13 @@ export function SerializeNewYorkNew(newYorkNew: NewYorkTimeNew): New {
 }
 
 export function SerializeGuardianNew(guardianNew: GuardianNew): New {
-  const { webTitle, webUrl, webPublicationDate, tags: contributor } = guardianNew;
+  const { webTitle, webUrl, webPublicationDate, tags } = guardianNew;
 
   return {
     url: webUrl,
     publishedAt: webPublicationDate,
     source: 'The Guardian',
     title: webTitle,
-    author: contributor.webTitle,
+    author: getGuardianContributors(tags),
   };
 }
