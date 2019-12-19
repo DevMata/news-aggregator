@@ -15,7 +15,23 @@ const GUARDIAN_FILTERS = '&show-tags=contributor';
 export class NewsService {
   constructor(private readonly httpService: HttpService, private readonly configService: ConfigService) {}
 
-  newYorkTimeSearch(searchTerm: string): Observable<New[]> {
+  switchSourceSearch(q: string, source: string): Observable<New[]> {
+    switch (source.toLowerCase()) {
+      case 'nyt':
+        return this.newYorkTimeSearch(q);
+
+      case 'guardian':
+        return this.guardianSearch(q);
+
+      case 'both':
+        return this.bothSearch(q);
+
+      default:
+        break;
+    }
+  }
+
+  private newYorkTimeSearch(searchTerm: string): Observable<New[]> {
     try {
       const NYT_KEY = this.configService.get<string>('NYT_KEY');
 
@@ -27,7 +43,7 @@ export class NewsService {
     }
   }
 
-  guardianSearch(searchTerm: string): Observable<New[]> {
+  private guardianSearch(searchTerm: string): Observable<New[]> {
     try {
       const GUARDIAN_KEY = this.configService.get<string>('GUARDIAN_KEY');
 
@@ -39,7 +55,7 @@ export class NewsService {
     }
   }
 
-  bothSearch(searchTerm: string): Observable<New[]> {
+  private bothSearch(searchTerm: string): Observable<New[]> {
     const nytSearch = this.newYorkTimeSearch(searchTerm);
     const guardianSearch = this.guardianSearch(searchTerm);
 
