@@ -9,11 +9,12 @@ export class LoginController {
 
   @Post()
   @UsePipes(ValidateLoginPayloadPipe)
-  async validateLogin(@Body() login: LoginDto): Promise<string> {
-    if (this.loginService.findUser(login)) {
-      return '';
+  validateLogin(@Body() user: LoginDto): { token: string } {
+    if (this.loginService.findUser(user)) {
+      const token = this.loginService.generateToken(user);
+      return { token };
     } else {
-      throw new BadRequestException('user not found');
+      throw new BadRequestException('User not found');
     }
   }
 }
