@@ -3,9 +3,10 @@ import { ValidateSearchMiddleware } from './middleware/validate-search.middlewar
 import { ValidateSourceParamMiddleware } from './middleware/validate-source-param.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { NewsModule } from './news/news.module';
+import { LoginModule } from './login/login.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), NewsModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), NewsModule, LoginModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
