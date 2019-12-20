@@ -1,5 +1,7 @@
 /node_modules
 *try*
-**/**.js
-/dist
+**/*.js
+**/*.js.map
+**/*.d.ts
+*.tsbuildinfo
 .env

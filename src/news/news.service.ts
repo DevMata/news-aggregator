@@ -1,4 +1,4 @@
-import { Injectable, HttpService } from '@nestjs/common';
+import { Injectable, HttpService, BadRequestException, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable, merge } from 'rxjs';
 import { map, reduce } from 'rxjs/operators';
@@ -27,6 +27,7 @@ export class NewsService {
         return this.bothSearch(q);
 
       default:
+        throw new BadRequestException('Invalid source for search');
         break;
     }
   }
@@ -38,8 +39,8 @@ export class NewsService {
       return this.httpService
         .get(`${NYT_URL}q=${searchTerm}&api-key=${NYT_KEY}${NYT_FILTERS}`)
         .pipe(map(res => res.data.response.docs.map(SerializeNewYorkNew)));
-    } catch (error) {
-      console.error(error);
+    } catch {
+      throw new ServiceUnavailableException('NYT does not respond');
     }
   }
 
@@ -51,7 +52,7 @@ export class NewsService {
         .get(`${GUARDIAN_URL}?api-key=${GUARDIAN_KEY}&q=${searchTerm}${GUARDIAN_FILTERS}`)
         .pipe(map(res => res.data.response.results.map(SerializeGuardianNew)));
     } catch (error) {
-      console.error(error);
+      throw new ServiceUnavailableException('Guardian does not respond');
     }
   }
 
