@@ -5,14 +5,13 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\"",
+    "build": "tsc",
+    "format": "prettier --write \"/**/*.js\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "lint": "tslint -p tsconfig.json -c tslint.json"
+    "start:prod": "node src/main.js",
+    "up": "npm run build && npm run start:prod"
   },
   "dependencies": {
     "@nestjs/common": "^6.7.2",
@@ -48,7 +47,6 @@
     "ts-loader": "^6.1.1",
     "ts-node": "^8.4.1",
     "tsconfig-paths": "^3.9.0",
-    "tslint": "^5.20.0",
     "typescript": "^3.6.3"
   }
 }
